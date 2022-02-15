@@ -12,8 +12,10 @@ interface Post {
 // getting all posts
 const getPosts = async (req: Request, res: Response, next: NextFunction) => {
     // get some posts
+    console.log(req);
     let result: AxiosResponse = await axios.get(`https://jsonplaceholder.typicode.com/posts`);
     let posts: [Post] = result.data;
+    
     return res.status(200).json({
         message: posts
     });
@@ -24,6 +26,7 @@ const getPost = async (req: Request, res: Response, next: NextFunction) => {
     // get the post id from the req
     let id: string = req.params.id;
     // get the post
+    console.log(req);
     let result: AxiosResponse = await axios.get(`https://jsonplaceholder.typicode.com/posts/${id}`);
     let post: Post = result.data;
     return res.status(200).json({
