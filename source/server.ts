@@ -7,6 +7,7 @@ import routes from './routes/posts';
 const router: Express = express();
 
 /** Logging */
+router.use(express.static(__dirname + "/public"));
 router.use(morgan('dev'));
 /** Parse the request */
 router.use(express.urlencoded({ extended: false }));
