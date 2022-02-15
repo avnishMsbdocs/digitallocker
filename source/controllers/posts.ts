@@ -1,4 +1,5 @@
 /** source/controllers/posts.ts */
+const fs = require('fs');
 import { Request, Response, NextFunction } from 'express';
 import axios, { AxiosResponse } from 'axios';
 
@@ -13,12 +14,17 @@ interface Post {
 const getPosts = async (req: Request, res: Response, next: NextFunction) => {
     // get some posts
     console.log(req);
+    fs.appendFile('message.txt', 'data to append', function (err:any) {
+        if (err) throw err;
+        console.log('Saved!');
+      });
     let result: AxiosResponse = await axios.get(`https://jsonplaceholder.typicode.com/posts`);
     let posts: [Post] = result.data;
     
     return res.status(200).json({
         message: posts
     });
+ 
 };
 
 // getting a single post
@@ -27,6 +33,10 @@ const getPost = async (req: Request, res: Response, next: NextFunction) => {
     let id: string = req.params.id;
     // get the post
     console.log(req);
+    fs.appendFile('message22.txt', 'data to append second', function (err:any) {
+        if (err) throw err;
+        console.log('Saved!second');
+      });
     let result: AxiosResponse = await axios.get(`https://jsonplaceholder.typicode.com/posts/${id}`);
     let post: Post = result.data;
     return res.status(200).json({
