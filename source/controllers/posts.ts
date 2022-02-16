@@ -2,6 +2,7 @@
 const fs = require('fs');
 import { Request, Response, NextFunction } from 'express';
 import axios, { AxiosResponse } from 'axios';
+const winston = require('winston');
 
 interface Post {
     userId: Number;
@@ -9,15 +10,30 @@ interface Post {
     title: String;
     body: String;
 }
-
+const logger = winston.createLogger({
+    transports: [
+      new winston.transports.Console(),
+      new winston.transports.File({ filename: 'combined.log' })
+    ]
+  });
+  logger.log({
+    level: 'info',
+    message: 'Hello distributed log files!'
+  });
+  
+ 
 // getting all posts
 const getPosts = async (req: Request, res: Response, next: NextFunction) => {
     // get some posts
     console.log(req);
-    fs.appendFile('message.txt', 'data to append', function (err:any) {
-        if (err) throw err;
-        console.log('Saved!');
-      });
+    logger.info(req);
+    // fs.appendFile('message.txt', 'data to append', function (err:any) {
+    //     console.log(req);
+    //     console.log("test");
+    //     if (err) throw err;
+    //     console.log('Saved!');
+    //     // console.log(req);
+    //   });
     let result: AxiosResponse = await axios.get(`https://jsonplaceholder.typicode.com/posts`);
     let posts: [Post] = result.data;
     
@@ -32,11 +48,16 @@ const getPost = async (req: Request, res: Response, next: NextFunction) => {
     // get the post id from the req
     let id: string = req.params.id;
     // get the post
+    logger.info(req);
     console.log(req);
-    fs.appendFile('message22.txt', 'data to append second', function (err:any) {
-        if (err) throw err;
-        console.log('Saved!second');
-      });
+    // fs.appendFile('message22.txt', 'data to append second', function (err:any) {
+    //     console.log(req);
+        
+    //     // console.log('testasfs');
+    //     if (err) throw err;
+    //     console.log('Saved!second');
+        
+    //   });
     let result: AxiosResponse = await axios.get(`https://jsonplaceholder.typicode.com/posts/${id}`);
     let post: Post = result.data;
     return res.status(200).json({
